@@ -107,12 +107,11 @@ namespace SMC.SwordScripts
                 PhotonNetwork.Destroy(item);
             }
         }
-        /**public override void OnJump()
+        public override void OnJump()
         {
             base.OnJump();
-            if(Hilt) DestroySword();
-            SpawnSword();
-        }**/
+            if(!Hilt) SpawnSword();
+        }
         public override IEnumerator OnPointStart(IGameModeHandler gameModeHandler)
         {
             SpawnSword();
