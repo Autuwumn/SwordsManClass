@@ -1,7 +1,7 @@
 {
     "name": "SwordsmanClass",
-    "version_number": "1.0.1",
-    "website_url": "",
+    "version_number": "1.0.2",
+    "website_url": "https://github.com/Autuwumn/SwordsManClass",
     "description": "Become a master of the blade",
     "dependencies": [
         "willis81808-UnboundLib-3.2.6",
