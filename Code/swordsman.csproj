@@ -57,6 +57,9 @@
 	  <Reference Include="RarityLib">
 	    <HintPath>..\..\..\..\AppData\Roaming\r2modmanPlus-local\ROUNDS\profiles\Default\BepInEx\plugins\Root-RarityLib\RarityLib.dll</HintPath>
 	  </Reference>
+	  <Reference Include="Root_Cards">
+	    <HintPath>..\..\..\..\AppData\Roaming\r2modmanPlus-local\ROUNDS\profiles\Default\BepInEx\plugins\Root-Root_Cards\Root_Cards.dll</HintPath>
+	  </Reference>
 	  <Reference Include="UnboundLib">
 	    <HintPath>..\..\..\..\AppData\Roaming\r2modmanPlus-local\ROUNDS\profiles\Default\BepInEx\plugins\willis81808-UnboundLib\UnboundLib.dll</HintPath>
 	  </Reference>

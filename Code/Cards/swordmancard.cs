@@ -28,17 +28,12 @@ namespace SMC.Cards
             Description = "Sheathe your gun and draw a sword, all gun stats are combined and used for damage",
             ModName = SMC.ModInitials,
             Art = SMC.ArtAssets.LoadAsset<GameObject>("C_SwordmanClass"),
-            Rarity = RarityUtils.GetRarity("Rare"),
+            Rarity = CardInfo.Rarity.Uncommon,
             Theme = CardThemeColor.CardThemeColorType.DestructiveRed
         };
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers, Block block)
         {
             cardInfo.allowMultiple = false;
-        }
-        protected override void Added(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
-        {
-            SMC.swordLength = 2;
-            SMC.swordWidth = 0.5f;
         }
     }
 }
@@ -57,32 +52,42 @@ namespace SMC.SwordScripts
         }
         private void SpawnSword()
         {
-            if (!player.data.view.IsMine) return;
-            damageMult = gun.damage*gun.projectileSpeed/gunAmmo.reloadTime*gunAmmo.maxAmmo/3f*55f;
-            Hilt = PhotonNetwork.Instantiate("SMC_SwordHilt", player.data.hand.position,Quaternion.identity);
-            Hilt.GetComponent<Rigidbody2D>().transform.localScale = new Vector3(SMC.swordWidth,SMC.swordWidth,SMC.swordWidth);
-            Tip = PhotonNetwork.Instantiate("SMC_SwordTip", player.data.hand.position, Quaternion.identity);
+            if (Hilt) DestroySword();
+            if (player.data.view.IsMine)
+            {
+                damageMult = gun.damage * gun.projectileSpeed / gunAmmo.reloadTime * gunAmmo.maxAmmo / 3f * 55f;
+                Hilt = PhotonNetwork.Instantiate("SMC_SwordHilt", player.data.hand.position, Quaternion.identity);
+                Hilt.GetComponent<Rigidbody2D>().transform.localScale = new Vector3(SMC.swordWidth, SMC.swordWidth, SMC.swordWidth);
+                Tip = PhotonNetwork.Instantiate("SMC_SwordTip", player.data.hand.position, Quaternion.identity);
+                Tip.GetComponent<Rigidbody2D>().transform.localScale = new Vector3(SMC.swordWidth, SMC.swordWidth, SMC.swordWidth);
+                Tip.GetComponent<DamageBox>().damage = damageMult;
+                if (SMC.stun) Tip.GetComponent<DamageBox>().setFlyingFor = gun.attackSpeed * 0.75f;
+                if (SMC.knock) Tip.GetComponent<DamageBox>().force = 10000f;
+                Segment = new GameObject[SMC.swordLength];
+                for (var i = 0; i < SMC.swordLength; i++)
+                {
+                    Segment[i] = PhotonNetwork.Instantiate("SMC_SwordSegment", player.data.hand.position, Quaternion.identity);
+                    Segment[i].GetComponent<Rigidbody2D>().transform.localScale = new Vector3(SMC.swordWidth, SMC.swordWidth, SMC.swordWidth);
+                    Segment[i].GetComponent<DamageBox>().setFlyingFor = 0f;
+                    Segment[i].GetComponent<DamageBox>().force = 0f;
+                    Segment[i].GetComponent<DamageBox>().damage = damageMult;
+                    Segment[i].GetComponent<DamageBox>().cd = gun.attackSpeed * 2f;
+                    if (SMC.stun) Segment[i].GetComponent<DamageBox>().setFlyingFor = gun.attackSpeed * 1.5f;
+                    if (SMC.knock) Segment[i].GetComponent<DamageBox>().force = 10000f;
+                    var polli = Segment[i].gameObject.GetComponent<Collider2D>();
+                    foreach (var colli in player.GetComponentsInChildren<Collider2D>())
+                    {
+                        Physics2D.IgnoreCollision(polli, colli);
+                    }
+                }
+            }
+            Hilt.GetComponent<Rigidbody2D>().transform.localScale = new Vector3(SMC.swordWidth, SMC.swordWidth, SMC.swordWidth);
             Tip.GetComponent<Rigidbody2D>().transform.localScale = new Vector3(SMC.swordWidth, SMC.swordWidth, SMC.swordWidth);
-            Tip.GetComponent<DamageBox>().damage = damageMult;
-            if (SMC.stun) Tip.GetComponent<DamageBox>().setFlyingFor = gun.attackSpeed*0.75f;
-            if (SMC.knock) Tip.GetComponent<DamageBox>().force = 10000f;
-            Segment = new GameObject[SMC.swordLength];
-            for (var i = 0; i < SMC.swordLength; i++)
+            foreach(var item in Segment)
             {
-                Segment[i] = PhotonNetwork.Instantiate("SMC_SwordSegment", player.data.hand.position, Quaternion.identity);
-                Segment[i].GetComponent<Rigidbody2D>().transform.localScale = new Vector3(SMC.swordWidth, SMC.swordWidth, SMC.swordWidth);
-                Segment[i].GetComponent<DamageBox>().setFlyingFor = 0f;
-                Segment[i].GetComponent<DamageBox>().force = 0f;
-                Segment[i].GetComponent<DamageBox>().damage = damageMult;
-                Segment[i].GetComponent<DamageBox>().cd = gun.attackSpeed * 2f;
-                if (SMC.stun) Segment[i].GetComponent<DamageBox>().setFlyingFor = gun.attackSpeed*1.5f;
-                if (SMC.knock) Segment[i].GetComponent<DamageBox>().force = 10000f;
+                item.GetComponent<Rigidbody2D>().transform.localScale = new Vector3(SMC.swordWidth, SMC.swordWidth, SMC.swordWidth);
             }
-            var polli = Segment[0].gameObject.GetComponent<Collider2D>();
-            foreach (var colli in player.GetComponentsInChildren<Collider2D>())
-            {
-                Physics2D.IgnoreCollision(polli, colli);
-            }
+            
         }
         private void Update()
         {
@@ -106,11 +111,6 @@ namespace SMC.SwordScripts
             {
                 PhotonNetwork.Destroy(item);
             }
-        }
-        public override void OnJump()
-        {
-            base.OnJump();
-            if(!Hilt) SpawnSword();
         }
         public override IEnumerator OnPointStart(IGameModeHandler gameModeHandler)
         {

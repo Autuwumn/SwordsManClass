@@ -11,7 +11,7 @@ using ClassesManagerReborn.Util;
 
 namespace SMC.Cards
 {
-    public class KnockSword : SimpleCard
+    public class ElectroSword : SimpleCard
     {
         internal static CardInfo card = null;
         public override void Callback()
@@ -20,17 +20,17 @@ namespace SMC.Cards
         }
         public override CardDetails Details => new CardDetails
         {
-            Title = "Knockback Sword",
-            Description = "Shove your oponents",
+            Title = "Electro Sword",
+            Description = "Its schocking",
             ModName = SMC.ModInitials,
-            Art = SMC.ArtAssets.LoadAsset<GameObject>("C_LaunchSword"),
+            Art = SMC.ArtAssets.LoadAsset<GameObject>("C_ElectroSword"),
             Rarity = RarityUtils.GetRarity("Legendary"),
-            Theme = CardThemeColor.CardThemeColorType.DefensiveBlue,
+            Theme = CardThemeColor.CardThemeColorType.FirepowerYellow,
             Stats = new[]
             {
                 new CardInfoStat
                 {
-                    amount = "<#0000FF>Launching",
+                    amount = "<#FFFF00>Electric",
                     positive = true,
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned,
                     stat = "Sword"
@@ -44,12 +44,12 @@ namespace SMC.Cards
         protected override void Added(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             if (!player.data.view.IsMine) return;
-            SMC.knock = true;
+            SMC.stun = true;
         }
         protected override void Removed(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             if (!player.data.view.IsMine) return;
-            SMC.knock = false;
+            SMC.stun = false;
         }
     }
 }

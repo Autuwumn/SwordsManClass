@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using UnityEngine;
 using RarityLib.Utils;
 using ModsPlus;
@@ -11,7 +11,7 @@ using ClassesManagerReborn.Util;
 
 namespace SMC.Cards
 {
-    public class KnockSword : SimpleCard
+    public class LongerSword : SimpleCard
     {
         internal static CardInfo card = null;
         public override void Callback()
@@ -20,36 +20,45 @@ namespace SMC.Cards
         }
         public override CardDetails Details => new CardDetails
         {
-            Title = "Knockback Sword",
-            Description = "Shove your oponents",
+            Title = "Longsword",
+            Description = "Longersword but worse attack speed",
             ModName = SMC.ModInitials,
-            Art = SMC.ArtAssets.LoadAsset<GameObject>("C_LaunchSword"),
-            Rarity = RarityUtils.GetRarity("Legendary"),
-            Theme = CardThemeColor.CardThemeColorType.DefensiveBlue,
+            Art = SMC.ArtAssets.LoadAsset<GameObject>("C_Longersword"),
+            Rarity = CardInfo.Rarity.Rare,
+            Theme = CardThemeColor.CardThemeColorType.TechWhite,
             Stats = new[]
             {
                 new CardInfoStat
                 {
-                    amount = "<#0000FF>Launching",
+                    amount = "+100%",
+                    positive = false,
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned,
+                    stat = "Attack Speed"
+                },
+                new CardInfoStat
+                {
+                    amount = "+1",
                     positive = true,
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned,
-                    stat = "Sword"
+                    stat = "Segments"
                 }
             }
         };
-        public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers)
+        public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers, Block block)
         {
             cardInfo.allowMultiple = false;
+            gun.attackSpeed = 2f;
         }
         protected override void Added(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             if (!player.data.view.IsMine) return;
-            SMC.knock = true;
+            SMC.swordLength++;
+
         }
         protected override void Removed(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             if (!player.data.view.IsMine) return;
-            SMC.knock = false;
+            SMC.swordLength--;
         }
     }
 }

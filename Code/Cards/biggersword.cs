@@ -11,7 +11,7 @@ using ClassesManagerReborn.Util;
 
 namespace SMC.Cards
 {
-    public class KnockSword : SimpleCard
+    public class BigerSword : SimpleCard
     {
         internal static CardInfo card = null;
         public override void Callback()
@@ -20,36 +20,32 @@ namespace SMC.Cards
         }
         public override CardDetails Details => new CardDetails
         {
-            Title = "Knockback Sword",
-            Description = "Shove your oponents",
+            Title = "Bigger Sword",
+            Description = "Why what a big sword you have",
             ModName = SMC.ModInitials,
-            Art = SMC.ArtAssets.LoadAsset<GameObject>("C_LaunchSword"),
-            Rarity = RarityUtils.GetRarity("Legendary"),
-            Theme = CardThemeColor.CardThemeColorType.DefensiveBlue,
+            Art = SMC.ArtAssets.LoadAsset<GameObject>("C_Longsword"),
+            Rarity = CardInfo.Rarity.Uncommon,
+            Theme = CardThemeColor.CardThemeColorType.TechWhite,
             Stats = new[]
             {
                 new CardInfoStat
                 {
-                    amount = "<#0000FF>Launching",
+                    amount = "+1",
                     positive = true,
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned,
-                    stat = "Sword"
+                    stat = "Swordsize"
                 }
             }
         };
-        public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers)
-        {
-            cardInfo.allowMultiple = false;
-        }
         protected override void Added(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             if (!player.data.view.IsMine) return;
-            SMC.knock = true;
+            SMC.swordWidth+=0.2f;
         }
         protected override void Removed(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             if (!player.data.view.IsMine) return;
-            SMC.knock = false;
+            SMC.swordWidth += 0.2f;
         }
     }
 }

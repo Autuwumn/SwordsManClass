@@ -27,10 +27,10 @@ namespace SMC
     {
         private const string ModId = "koala.swordsman.class";
         private const string ModName = "Swordsman Class";
-        public const string Version = "1.0.2";
+        public const string Version = "1.0.7";
         public const string ModInitials = "SMC";
 
-        public static int swordLength = 0;
+        public static int swordLength = 2;
         public static float swordWidth = 0.5f;
         public static bool stun = false;
         public static bool knock = false;
@@ -60,7 +60,10 @@ namespace SMC
             CustomCard.BuildCard<BigerSword>((card) => { BigerSword.card = card; card.SetAbbreviation("Bs"); });
             CustomCard.BuildCard<ElectroSword>((card) => { ElectroSword.card = card; card.SetAbbreviation("Es"); });
             CustomCard.BuildCard<KnockSword>((card) => { KnockSword.card = card; card.SetAbbreviation("Ks"); });
-            //CustomCard.BuildCard<failure>((card) => { ModdingUtils.Utils.Cards.instance.AddHiddenCard(card); failure.card = card; card.SetAbbreviation("XX"); });
+            CustomCard.BuildCard<LongerSword>((card) => { LongerSword.card = card; card.SetAbbreviation("Ls"); });
+            CustomCard.BuildCard<ShortSword>((card) => { ShortSword.card = card; card.SetAbbreviation("Ss"); });
+            CustomCard.BuildCard<GreatSword>((card) => { GreatSword.card = card; card.SetAbbreviation("Gs"); });
+            CustomCard.BuildCard<Dagger>((card) => { Dagger.card = card; card.SetAbbreviation("Da"); });
         }
         public static bool Debug = false;
     }
