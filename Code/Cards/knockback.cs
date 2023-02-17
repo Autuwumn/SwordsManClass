@@ -8,6 +8,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System;
 using ClassesManagerReborn.Util;
+using SMC.SwordScripts;
 
 namespace SMC.Cards
 {
@@ -44,12 +45,12 @@ namespace SMC.Cards
         protected override void Added(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             if (!player.data.view.IsMine) return;
-            SMC.knock = true;
+            player.gameObject.GetComponent<SwordDataTracker>().knock = true;
         }
         protected override void Removed(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             if (!player.data.view.IsMine) return;
-            SMC.knock = false;
+            player.gameObject.GetComponent<SwordDataTracker>().knock = false;
         }
     }
 }

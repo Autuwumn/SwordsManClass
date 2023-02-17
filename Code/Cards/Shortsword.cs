@@ -8,6 +8,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System;
 using ClassesManagerReborn.Util;
+using SMC.SwordScripts;
 
 namespace SMC.Cards
 {
@@ -21,7 +22,7 @@ namespace SMC.Cards
         public override CardDetails Details => new CardDetails
         {
             Title = "Shortsword",
-            Description = "Shortersword but better attack speed",
+            Description = "Smaller sword but more attack speed",
             ModName = SMC.ModInitials,
             Art = SMC.ArtAssets.LoadAsset<GameObject>("C_Shortersword"),
             Rarity = CardInfo.Rarity.Rare,
@@ -32,15 +33,15 @@ namespace SMC.Cards
                 {
                     amount = "-100%",
                     positive = true,
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned,
+                    simepleAmount = CardInfoStat.SimpleAmount.aLotOf,
                     stat = "Attackspeed"
                 },
                 new CardInfoStat
                 {
-                    amount = "-1",
+                    amount = "-2",
                     positive = false,
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned,
-                    stat = "Segments"
+                    simepleAmount = CardInfoStat.SimpleAmount.slightlySmaller,
+                    stat = "Swordsize"
                 }
             }
         };
@@ -52,12 +53,12 @@ namespace SMC.Cards
         protected override void Added(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             if (!player.data.view.IsMine) return;
-            SMC.swordLength--;
+            player.gameObject.GetComponent<SwordDataTracker>().size -= 0.4f;
         }
         protected override void Removed(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             if (!player.data.view.IsMine) return;
-            SMC.swordLength++;
+            player.gameObject.GetComponent<SwordDataTracker>().size += 0.4f;
         }
     }
 }

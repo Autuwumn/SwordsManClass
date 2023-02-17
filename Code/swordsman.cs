@@ -27,13 +27,8 @@ namespace SMC
     {
         private const string ModId = "koala.swordsman.class";
         private const string ModName = "Swordsman Class";
-        public const string Version = "1.0.7";
+        public const string Version = "1.1.0";
         public const string ModInitials = "SMC";
-
-        public static int swordLength = 2;
-        public static float swordWidth = 0.5f;
-        public static bool stun = false;
-        public static bool knock = false;
 
         internal static SMC instance;
 
@@ -51,10 +46,8 @@ namespace SMC
             {
                 UnityEngine.Debug.Log("Chad Vanilla art asset bundle either doesn't exist or failed to load.");
             }
-            PhotonNetwork.PrefabPool.RegisterPrefab("SMC_SwordHilt", ArtAssets.LoadAsset<GameObject>("srowdHilt"));
-            PhotonNetwork.PrefabPool.RegisterPrefab("SMC_SwordSegment", ArtAssets.LoadAsset<GameObject>("srowdMiddle"));
-            PhotonNetwork.PrefabPool.RegisterPrefab("SMC_SwordTip", ArtAssets.LoadAsset<GameObject>("srowdEnd"));
 
+            PhotonNetwork.PrefabPool.RegisterPrefab("SMC_Sword", ArtAssets.LoadAsset<GameObject>("leStabber"));
 
             CustomCard.BuildCard<SwordClassCard>((card) => { SwordClassCard.card = card; card.SetAbbreviation("Sc"); });
             CustomCard.BuildCard<BigerSword>((card) => { BigerSword.card = card; card.SetAbbreviation("Bs"); });
