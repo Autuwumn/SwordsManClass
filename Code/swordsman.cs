@@ -27,7 +27,7 @@ namespace SMC
     {
         private const string ModId = "koala.swordsman.class";
         private const string ModName = "Swordsman Class";
-        public const string Version = "1.1.0";
+        public const string Version = "1.3.3";
         public const string ModInitials = "SMC";
 
         internal static SMC instance;
