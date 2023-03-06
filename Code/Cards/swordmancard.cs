@@ -17,6 +17,7 @@ using System.Xml.Schema;
 using UnityEngine.SceneManagement;
 using ExitGames.Client.Photon.StructWrapping;
 using UnboundLib.Networking;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SMC.Cards
 {
@@ -44,7 +45,8 @@ namespace SMC.Cards
                     simepleAmount = CardInfoStat.SimpleAmount.aLotOf,
                     stat = "Swordsize"
                 }
-            }
+            }//,
+            //OwnerOnly = true
         };
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers, Block block)
         {
@@ -62,16 +64,20 @@ namespace SMC.SwordScripts
         private SwordHandler theSrowd;
         protected override void Start()
         {
+            /**
             var swo = PhotonNetwork.Instantiate("SMC_Sword", player.data.hand.position, Quaternion.identity);
-            theSrowd = swo.AddComponent<SwordHandler>();
+            NetworkingManager.RPC(typeof(SwordCard), nameof(RPC_SwordWork), swo.name, player.playerID);
+            theSrowd = swo.GetComponent<SwordHandler>();
+            **/
+            var swo = Instantiate(SMC.ArtAssets.LoadAsset<GameObject>("leStabber"));
+            theSrowd = swo.GetOrAddComponent<SwordHandler>();
             theSrowd.owner = player;
-            NetworkingManager.RPC_Others(typeof(SwordCard), nameof(RPC_SwordWork), swo, player);
             FixSword();
         }
         [UnboundRPC]
-        public static void RPC_SwordWork(GameObject sword, Player player)
+        public static void RPC_SwordWork(string swordName, int playerid)
         {
-            sword.gameObject.AddComponent<SwordHandler>().owner = player;
+            UnityEngine.GameObject.Find(swordName).AddComponent<SwordHandler>().owner = PlayerManager.instance.players.Where((p) => p.playerID == playerid).ToArray()[0];
         }
         private void FixSword()
         {
