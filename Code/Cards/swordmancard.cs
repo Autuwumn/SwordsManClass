@@ -117,7 +117,7 @@ namespace SMC.SwordScripts
         }
         protected override void OnDestroy()
         {
-            Destroy(theSrowd.gameObject);
+            PhotonNetwork.Destroy(theSrowd.gameObject);
             base.OnDestroy();
         }
     }
@@ -170,6 +170,10 @@ namespace SMC.SwordScripts
             if (!stun) damagebox.setFlyingFor = 0;
             if (knock) damagebox.force = 5000;
             if (stun) damagebox.setFlyingFor = 1;
+            if(owner.data.health <= 0)
+            {
+                rigid.position = new Vector3(1000, 1000, 0);
+            }
         }
     }
 }

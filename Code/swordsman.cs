@@ -27,13 +27,13 @@ namespace SMC
     {
         private const string ModId = "koala.swordsman.class";
         private const string ModName = "Swordsman Class";
-        public const string Version = "1.5.0";
+        public const string Version = "1.5.2";
         public const string ModInitials = "SMC";
 
         internal static SMC instance;
 
         internal static AssetBundle ArtAssets;
-
+        
         void Start()
         {
             var harmony = new Harmony(ModId);
