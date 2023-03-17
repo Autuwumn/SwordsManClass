@@ -45,8 +45,8 @@ namespace SMC.Cards
                     simepleAmount = CardInfoStat.SimpleAmount.aLotOf,
                     stat = "Swordsize"
                 }
-            }//,
-            //OwnerOnly = true
+            },
+            OwnerOnly = true
         };
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers, Block block)
         {
@@ -64,20 +64,38 @@ namespace SMC.SwordScripts
         private SwordHandler theSrowd;
         protected override void Start()
         {
-            /**
             var swo = PhotonNetwork.Instantiate("SMC_Sword", player.data.hand.position, Quaternion.identity);
-            NetworkingManager.RPC(typeof(SwordCard), nameof(RPC_SwordWork), swo.name, player.playerID);
+            print(swo.name + ", " + nameof(swo));
+            SMC.instance.ExecuteAfterFrames(20, () =>
+            {
+                NetworkingManager.RPC(typeof(SwordCard), nameof(RPC_SwordWork), swo.name, player.playerID);
+            });
             theSrowd = swo.GetComponent<SwordHandler>();
-            **/
-            var swo = Instantiate(SMC.ArtAssets.LoadAsset<GameObject>("leStabber"));
-            theSrowd = swo.GetOrAddComponent<SwordHandler>();
-            theSrowd.owner = player;
             FixSword();
+            //var swo = Instantiate(SMC.ArtAssets.LoadAsset<GameObject>("leStabber"));
+            //theSrowd = swo.GetOrAddComponent<SwordHandler>();
+            //theSrowd.owner = player;
         }
         [UnboundRPC]
         public static void RPC_SwordWork(string swordName, int playerid)
         {
-            UnityEngine.GameObject.Find(swordName).AddComponent<SwordHandler>().owner = PlayerManager.instance.players.Where((p) => p.playerID == playerid).ToArray()[0];
+            var obejcts = UnityEngine.GameObject.FindGameObjectsWithTag("Bullet");
+            List<GameObject> srowds = new List<GameObject>();
+            foreach(var obj in obejcts)
+            {
+                if(obj.name == swordName)
+                {
+                    srowds.Add(obj);
+                }
+            }
+            foreach(var swo in srowds)
+            {
+                if(swo.GetComponent<SwordHandler>() == null)
+                {
+                    swo.AddComponent<SwordHandler>().owner = PlayerManager.instance.players.Where((p) => p.playerID == playerid).ToArray()[0];
+                }
+            }
+            //UnityEngine.GameObject.Find(swordName).AddComponent<SwordHandler>().owner = PlayerManager.instance.players.Where((p) => p.playerID == playerid).ToArray()[0];
         }
         private void FixSword()
         {
@@ -116,6 +134,11 @@ namespace SMC.SwordScripts
         }
         public void Update()
         {
+            var poli = gameObject.GetComponentInChildren<PolygonCollider2D>();
+            foreach (var colli in owner.GetComponentsInChildren<Collider2D>())
+            {
+                Physics2D.IgnoreCollision(poli, colli);
+            }
             var size = 0.6f;
             var stun = false;
             var knock = false;
